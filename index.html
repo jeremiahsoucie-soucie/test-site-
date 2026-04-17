@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Long Game — Life Performance Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root {
+  --bg:#0A0F1A;
+  --bg2:#101826;
+  --bg3:#16202E;
+  --bg4:#1C2A3A;
+  --surface:#1E2D40;
+  --border:rgba(255,255,255,0.07);
+  --border2:rgba(255,255,255,0.12);
+  --border3:rgba(255,255,255,0.18);
+  --text:#E8E2D6;
+  --text2:#8A95A8;
+  --text3:#4A5568;
+  --p1:#2DBE8A; /* Physical - teal */
+  --p2:#8B7FF0; /* Mental - purple */
+  --p3:#C9A84C; /* Financial - gold */
+  --p4:#E07B6A; /* Inner - coral */
+  --p5:#4EA8DE; /* Relational - blue */
+  --accent:#2DBE8A;
+}
+
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+
+body::before{content:'';position:fixed;inset:0;background:
+  radial-gradient(ellipse 100% 60% at 20% 0%,rgba(45,190,138,0.06) 0%,transparent 55%),
+  radial-gradient(ellipse 80% 50% at 85% 100%,rgba(78,168,222,0.05) 0%,transparent 50%);
+  pointer-events:none;z-index:0}
+
+.app{position:relative;z-index:1;min-height:100vh}
+
+/* NAV */
+nav{display:flex;align-items:center;justify-content:space-between;padding:22px 40px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(10,15,26,0.92);backdrop-filter:blur(12px);z-index:50}
+.logo{font-family:'Fraunces',serif;font-size:20px;color:var(--text);letter-spacing:-0.01em}
+.logo em{color:var(--accent);font-style:italic}
+.nav-right{display:flex;align-items:center;gap:20px}
+.nav-score{font-size:13px;color:var(--text2);display:none}
+.nav-score span{color:var(--text);font-weight:500}
+.nav-tabs{display:flex;gap:4px;background:var(--bg3);border-radius:10px;padding:4px;display:none}
+.nav-tab{padding:7px 16px;border-radius:7px;font-size:13px;color:var(--text2);cursor:pointer;border:none;background:transparent;transition:all 0.2s;font-family:'DM Sans',sans-serif}
+.nav-tab.active{background:var(--surface);color:var(--text)}
+.nav-tab:hover:not(.active){color:var(--text)}
+
+/* PROGRESS */
+.prog-bar{position:fixed;top:0;left:0;right:0;height:2px;z-index:100;opacity:0;transition:opacity 0.4s}
+.prog-bar.show{opacity:1}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--p1),var(--p5));transition:width 0.5s cubic-bezier(0.4,0,0.2,1)}
+
+/* SCREENS */
+.screen{display:none;animation:fadeUp 0.5s ease both}
+.screen.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* WELCOME */
+.welcome{max-width:860px;margin:0 auto;padding:80px 40px}
+.welcome-kicker{font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:24px;display:flex;align-items:center;gap:10px}
+.welcome-kicker::before{content:'';width:24px;height:1px;background:var(--accent)}
+.welcome-h{font-family:'Fraunces',serif;font-size:clamp(44px,7vw,78px);line-height:1.05;letter-spacing:-0.02em;color:var(--text);margin-bottom:28px}
+.welcome-h em{color:var(--accent);font-style:italic}
+.welcome-p{font-size:18px;color:var(--text2);line-height:1.8;max-width:580px;margin-bottom:48px}
+.welcome-p strong{color:var(--text);font-weight:400}
+
+.transition-box{padding:28px 32px;border:1px solid var(--border2);border-left:3px solid var(--accent);border-radius:12px;background:var(--bg2);margin-bottom:48px;max-width:620px}
+.transition-box p{font-size:15px;color:var(--text2);line-height:1.8;font-style:italic}
+.transition-box cite{font-size:12px;color:var(--text3);margin-top:8px;display:block;font-style:normal}
+
+.pillars-row{display:flex;gap:10px;margin-bottom:56px;flex-wrap:wrap}
+.pillar-tag{display:flex;align-items:center;gap:8px;padding:9px 16px;border:1px solid var(--border);border-radius:20px;background:var(--bg2);font-size:13px;color:var(--text2)}
+.pillar-tag-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+
+.welcome-actions{display:flex;gap:12px;align-items:center}
+
+/* ONBOARDING */
+.onboard{max-width:620px;margin:0 auto;padding:70px 40px}
+.onboard-step{margin-bottom:44px}
+.field-label{font-size:13px;color:var(--text2);margin-bottom:10px;display:block;letter-spacing:0.02em}
+.field-input{width:100%;padding:14px 18px;background:var(--bg2);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;outline:none;transition:border-color 0.2s}
+.field-input:focus{border-color:var(--accent)}
+.field-input::placeholder{color:var(--text3)}
+.style-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px}
+.style-card{padding:20px;border:1px solid var(--border2);border-radius:12px;background:var(--bg2);cursor:pointer;transition:all 0.2s}
+.style-card:hover{border-color:var(--border3);background:var(--bg3)}
+.style-card.selected{border-color:var(--accent);background:rgba(45,190,138,0.06)}
+.style-card-icon{font-size:22px;margin-bottom:10px}
+.style-card-name{font-size:15px;font-weight:500;margin-bottom:4px;color:var(--text)}
+.style-card-desc{font-size:13px;color:var(--text2);line-height:1.6}
+.section-h{font-family:'Fraunces',serif;font-size:28px;margin-bottom:8px;color:var(--text)}
+.section-sub{font-size:15px;color:var(--text2);line-height:1.7;margin-bottom:36px}
+
+/* ASSESSMENT */
+.assessment{max-width:680px;margin:0 auto;padding:60px 40px}
+.pillar-header{display:flex;align-items:center;gap:12px;margin-bottom:36px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.pillar-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.pillar-meta{}
+.pillar-meta-name{font-size:13px;font-weight:500;margin-bottom:2px}
+.pillar-meta-desc{font-size:12px;color:var(--text3)}
+.q-num{font-size:12px;color:var(--text3);margin-bottom:10px;letter-spacing:0.05em}
+.q-text{font-family:'Fraunces',serif;font-size:clamp(20px,3.5vw,28px);line-height:1.35;color:var(--text);margin-bottom:32px}
+.options{display:flex;flex-direction:column;gap:9px;margin-bottom:36px}
+.opt{display:flex;align-items:center;gap:14px;padding:15px 18px;border:1px solid var(--border);border-radius:10px;background:var(--bg2);cursor:pointer;transition:all 0.18s;font-size:14px;color:var(--text2)}
+.opt:hover{border-color:var(--border2);color:var(--text);background:var(--bg3)}
+.opt.sel{border-color:var(--accent);background:rgba(45,190,138,0.07);color:var(--text)}
+.opt-circle{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--border2);flex-shrink:0;transition:all 0.18s;display:flex;align-items:center;justify-content:center}
+.opt.sel .opt-circle{background:var(--accent);border-color:var(--accent)}
+.opt.sel .opt-circle::after{content:'';width:6px;height:6px;background:#0A0F1A;border-radius:50%}
+.nav-btns{display:flex;align-items:center;gap:10px}
+.q-progress{font-size:12px;color:var(--text3);margin-left:auto}
+.err{padding:12px 16px;background:rgba(224,123,106,0.1);border:1px solid rgba(224,123,106,0.25);border-radius:8px;color:#E07B6A;font-size:13px;margin-bottom:16px;display:none}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 26px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:all 0.2s;border:none;letter-spacing:0.01em}
+.btn-primary{background:var(--accent);color:#0A0F1A}
+.btn-primary:hover{background:#35D99E;transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border2)}
+.btn-ghost:hover{color:var(--text);background:var(--bg3);border-color:var(--border3)}
+.btn-sm{padding:9px 18px;font-size:13px}
+
+/* LOADING */
+.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;text-align:center;padding:40px}
+.loading-orb{width:72px;height:72px;border-radius:50%;border:2px solid var(--border);border-top-color:var(--accent);border-right-color:var(--p2);animation:spin 1.2s linear infinite;margin-bottom:36px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-h{font-family:'Fraunces',serif;font-size:30px;margin-bottom:10px}
+.loading-p{font-size:15px;color:var(--text2)}
+.loading-steps{margin-top:28px;display:flex;flex-direction:column;gap:8px;text-align:left;max-width:300px}
+.loading-step{font-size:13px;color:var(--text3);display:flex;align-items:center;gap:10px;transition:color 0.4s}
+.loading-step.done{color:var(--accent)}
+.loading-step::before{content:'○';font-size:10px;flex-shrink:0}
+.loading-step.done::before{content:'●'}
+
+/* DASHBOARD */
+.dashboard{max-width:900px;margin:0 auto;padding:50px 40px}
+.dash-header{margin-bottom:40px}
+.dash-greeting{font-size:14px;color:var(--text2);margin-bottom:6px}
+.dash-name{font-family:'Fraunces',serif;font-size:clamp(30px,5vw,46px);margin-bottom:4px}
+.dash-date{font-size:13px;color:var(--text3)}
+
+.score-hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.score-main{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:32px;display:flex;align-items:center;gap:32px}
+.score-ring-wrap{position:relative;flex-shrink:0}
+.score-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.score-num{font-family:'Fraunces',serif;font-size:40px;line-height:1}
+.score-denom{font-size:11px;color:var(--text3);margin-top:2px}
+.score-text h3{font-family:'Fraunces',serif;font-size:20px;margin-bottom:6px}
+.score-text p{font-size:14px;color:var(--text2);line-height:1.7}
+
+.narrative-card{background:var(--bg2);border:1px solid var(--border);border-left:2px solid var(--accent);border-radius:16px;padding:28px;display:flex;flex-direction:column;justify-content:center}
+.narrative-card-label{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+.narrative-card p{font-family:'Fraunces',serif;font-size:16px;line-height:1.7;color:var(--text2);font-style:italic}
+
+.pillars-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:24px}
+.pillar-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center}
+.pillar-card-name{font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.4}
+.pillar-card-score{font-family:'Fraunces',serif;font-size:30px;margin-bottom:8px}
+.pillar-bar-bg{height:3px;background:var(--border);border-radius:2px;margin-bottom:10px}
+.pillar-bar{height:100%;border-radius:2px;transition:width 1.2s cubic-bezier(0.4,0,0.2,1)}
+.pillar-insight{font-size:11px;color:var(--text2);line-height:1.5;text-align:left}
+
+.priorities-section{margin-bottom:24px}
+.section-label{font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:16px}
+.priority-cards{display:flex;flex-direction:column;gap:10px}
+.priority-card{display:flex;gap:16px;padding:18px 20px;background:var(--bg2);border:1px solid var(--border);border-radius:12px}
+.priority-n{width:28px;height:28px;border-radius:8px;background:rgba(45,190,138,0.1);border:1px solid rgba(45,190,138,0.2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--accent);flex-shrink:0}
+.priority-card h4{font-size:14px;font-weight:500;margin-bottom:4px}
+.priority-card p{font-size:13px;color:var(--text2);line-height:1.6}
+
+.dash-actions{display:flex;gap:10px;flex-wrap:wrap}
+
+/* COACH */
+.coach-wrap{display:grid;grid-template-columns:280px 1fr;min-height:calc(100vh - 65px)}
+.coach-sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:28px 20px;display:flex;flex-direction:column;gap:4px}
+.sidebar-section{margin-bottom:20px}
+.sidebar-label{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);padding:0 8px;margin-bottom:8px}
+.sidebar-score{padding:14px 12px;background:var(--bg3);border-radius:10px;margin-bottom:12px}
+.sidebar-score-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.sidebar-score-name{font-size:12px;color:var(--text2)}
+.sidebar-score-val{font-size:13px;font-weight:500}
+.sidebar-bar-bg{height:2px;background:var(--border);border-radius:2px}
+.sidebar-bar{height:100%;border-radius:2px;transition:width 1s ease}
+.sidebar-pillar-mini{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--text2);transition:all 0.2s}
+.sidebar-pillar-mini:hover{background:var(--bg3);color:var(--text)}
+.sidebar-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+
+.coach-main{display:flex;flex-direction:column}
+.coach-header{padding:20px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px}
+.coach-avatar{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,rgba(45,190,138,0.2),rgba(78,168,222,0.2));border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.coach-meta h3{font-size:15px;font-weight:500;margin-bottom:2px}
+.coach-meta p{font-size:12px;color:var(--text2)}
+.coach-mode-badge{margin-left:auto;padding:5px 12px;border-radius:20px;font-size:11px;border:1px solid var(--border2);color:var(--text2)}
+
+.messages{flex:1;padding:28px;display:flex;flex-direction:column;gap:16px;overflow-y:auto;max-height:calc(100vh - 220px)}
+.msg{display:flex;gap:12px;max-width:85%}
+.msg.user{align-self:flex-end;flex-direction:row-reverse}
+.msg-bubble{padding:14px 18px;border-radius:14px;font-size:14px;line-height:1.7}
+.msg.coach .msg-bubble{background:var(--bg3);border:1px solid var(--border);color:var(--text2);border-radius:4px 14px 14px 14px}
+.msg.user .msg-bubble{background:rgba(45,190,138,0.12);border:1px solid rgba(45,190,138,0.2);color:var(--text);border-radius:14px 4px 14px 14px}
+.msg-avatar{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;align-self:flex-end}
+.coach .msg-avatar{background:var(--bg3);border:1px solid var(--border)}
+.user .msg-avatar{background:rgba(45,190,138,0.15);border:1px solid rgba(45,190,138,0.2);font-size:12px;font-weight:500;color:var(--accent)}
+.msg-typing{display:flex;gap:5px;align-items:center;padding:16px 18px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--text3);animation:bounce 1.2s ease infinite}
+.dot:nth-child(2){animation-delay:0.2s}
+.dot:nth-child(3){animation-delay:0.4s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+
+.coach-input-wrap{padding:16px 28px;border-top:1px solid var(--border);display:flex;gap:10px;align-items:flex-end}
+.coach-input{flex:1;padding:13px 16px;background:var(--bg2);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;resize:none;outline:none;min-height:46px;max-height:120px;line-height:1.5;transition:border-color 0.2s}
+.coach-input:focus{border-color:var(--accent)}
+.coach-input::placeholder{color:var(--text3)}
+
+.suggested-qs{padding:0 28px 12px;display:flex;gap:8px;flex-wrap:wrap}
+.sug-q{padding:7px 14px;border:1px solid var(--border);border-radius:20px;font-size:12px;color:var(--text2);cursor:pointer;transition:all 0.2s;background:var(--bg2)}
+.sug-q:hover{border-color:var(--border2);color:var(--text)}
+
+/* CHECKIN */
+.checkin{max-width:600px;margin:0 auto;padding:60px 40px}
+.checkin-intro{margin-bottom:40px}
+.checkin-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:20px;background:rgba(45,190,138,0.1);border:1px solid rgba(45,190,138,0.2);font-size:12px;color:var(--accent);margin-bottom:20px}
+.pulse-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 2s ease infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+.slider-wrap{margin-bottom:28px}
+.slider-label{display:flex;justify-content:space-between;margin-bottom:10px}
+.slider-name{font-size:14px;color:var(--text)}
+.slider-val{font-size:14px;font-weight:500;color:var(--accent)}
+.slider{width:100%;-webkit-appearance:none;height:4px;border-radius:2px;background:var(--border2);outline:none}
+.slider::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid var(--bg)}
+.slider-ends{display:flex;justify-content:space-between;margin-top:6px}
+.slider-end{font-size:11px;color:var(--text3)}
+
+.open-q{margin-bottom:28px}
+.open-q label{font-size:14px;color:var(--text2);margin-bottom:10px;display:block;line-height:1.5}
+.open-textarea{width:100%;padding:14px 16px;background:var(--bg2);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;resize:none;outline:none;min-height:90px;line-height:1.6;transition:border-color 0.2s}
+.open-textarea:focus{border-color:var(--accent)}
+.open-textarea::placeholder{color:var(--text3)}
+
+/* UTILITY */
+@media(max-width:768px){
+  nav{padding:16px 20px}
+  .welcome,.onboard,.assessment,.dashboard,.checkin{padding:50px 20px}
+  .score-hero{grid-template-columns:1fr}
+  .pillars-grid{grid-template-columns:repeat(2,1fr)}
+  .coach-wrap{grid-template-columns:1fr}
+  .coach-sidebar{display:none}
+  .style-cards{grid-template-columns:1fr}
+  .pillars-row{gap:6px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<div class="prog-bar" id="progBar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+
+<nav>
+  <div class="logo">The <em>Long</em> Game</div>
+  <div class="nav-right">
+    <div class="nav-score" id="navScore">Long Game Score: <span id="navScoreVal">--</span></div>
+    <div class="nav-tabs" id="navTabs">
+      <button class="nav-tab active" onclick="switchTab('dashboard')">Overview</button>
+      <button class="nav-tab" onclick="switchTab('coach')">AI Coach</button>
+      <button class="nav-tab" onclick="switchTab('checkin')">Check-in</button>
+    </div>
+  </div>
+</nav>
+
+<!-- WELCOME -->
+<div class="screen active" id="screen-welcome">
+<div class="welcome">
+  <div class="welcome-kicker">Life Performance Platform</div>
+  <h1 class="welcome-h">The most important<br>transition of your life<br>deserves a <em>plan.</em></h1>
+  <p class="welcome-p">You've spent 25 years building a successful career. Now something quieter is asking a louder question. This isn't a crisis — it's a <strong>passage.</strong> And how you navigate it determines everything about the next chapter.</p>
+
+  <div class="transition-box">
+    <p>"The first half of life is devoted to forming a healthy ego, the second half is going inward and letting go of it." Most high performers arrive at this threshold with exceptional external achievements and an underdeveloped inner life. The Long Game is designed for exactly this moment.</p>
+    <cite>— Carl Jung, adapted</cite>
+  </div>
+
+  <div class="pillars-row">
+    <div class="pillar-tag"><div class="pillar-tag-dot" style="background:var(--p1)"></div>Physical Longevity</div>
+    <div class="pillar-tag"><div class="pillar-tag-dot" style="background:var(--p2)"></div>Mental Performance</div>
+    <div class="pillar-tag"><div class="pillar-tag-dot" style="background:var(--p3)"></div>Financial Sovereignty</div>
+    <div class="pillar-tag"><div class="pillar-tag-dot" style="background:var(--p4)"></div>Inner Life</div>
+    <div class="pillar-tag"><div class="pillar-tag-dot" style="background:var(--p5)"></div>Relational Life</div>
+  </div>
+
+  <div class="welcome-actions">
+    <button class="btn btn-primary" onclick="goTo('onboard')">
+      Begin Your Assessment
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <span style="font-size:13px;color:var(--text3)">15 questions · ~10 minutes</span>
+  </div>
+</div>
+</div>
+
+<!-- ONBOARD -->
+<div class="screen" id="screen-onboard">
+<div class="onboard">
+  <div class="section-h">Let's start with you</div>
+  <div class="section-sub">A few things to personalize your experience before we begin.</div>
+
+  <div class="onboard-step">
+    <label class="field-label">Your first name</label>
+    <input class="field-input" type="text" id="userName" placeholder="First name" autocomplete="given-name">
+  </div>
+
+  <div class="onboard-step">
+    <label class="field-label" style="margin-bottom:14px">How would you like your AI coach to work with you?</label>
+    <div class="style-cards">
+      <div class="style-card selected" onclick="selectStyle('coach')" id="style-coach">
+        <div class="style-card-icon">⚡</div>
+        <div class="style-card-name">Coach mode</div>
+        <div class="style-card-desc">Direct, evidence-based, precise. Challenges you with honest feedback. Focused on measurable outcomes.</div>
+      </div>
+      <div class="style-card" onclick="selectStyle('advisor')" id="style-advisor">
+        <div class="style-card-icon">🔍</div>
+        <div class="style-card-name">Advisor mode</div>
+        <div class="style-card-desc">Socratic and reflective. Asks the questions you haven't thought to ask. Explores before it prescribes.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="onboard-step">
+    <label class="field-label">What's brought you here right now? (Optional)</label>
+    <textarea class="field-input" id="userContext" rows="3" placeholder="A sense that something needs to change, a transition you're navigating, a question you keep coming back to..." style="resize:none;line-height:1.6"></textarea>
+  </div>
+
+  <div style="display:flex;gap:10px">
+    <button class="btn btn-ghost" onclick="goTo('welcome')">Back</button>
+    <button class="btn btn-primary" onclick="startAssessment()">
+      Start Assessment
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+</div>
+</div>
+
+<!-- ASSESSMENT -->
+<div class="screen" id="screen-assessment">
+<div class="assessment">
+  <div class="pillar-header" id="pillarHeader"></div>
+  <div class="q-num" id="qNum"></div>
+  <div class="q-text" id="qText"></div>
+  <div class="options" id="opts"></div>
+  <div class="err" id="qErr">Please choose an answer to continue.</div>
+  <div class="nav-btns">
+    <button class="btn btn-ghost btn-sm" id="btnBack" onclick="prevQ()">← Back</button>
+    <button class="btn btn-primary btn-sm" onclick="nextQ()"><span id="btnNextTxt">Next</span> →</button>
+    <span class="q-progress" id="qProg"></span>
+  </div>
+</div>
+</div>
+
+<!-- LOADING -->
+<div class="screen" id="screen-loading">
+<div class="loading">
+  <div class="loading-orb"></div>
+  <div class="loading-h">Analyzing your results</div>
+  <div class="loading-p">Your personalized Long Game report is being generated.</div>
+  <div class="loading-steps">
+    <div class="loading-step" id="ls1">Scoring five life dimensions</div>
+    <div class="loading-step" id="ls2">Identifying patterns and priorities</div>
+    <div class="loading-step" id="ls3">Calibrating your AI coaching partner</div>
+    <div class="loading-step" id="ls4">Building your Long Game report</div>
+  </div>
+</div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="screen" id="screen-dashboard">
+<div class="dashboard">
+  <div class="dash-header">
+    <div class="dash-greeting" id="dashGreeting">Good morning</div>
+    <div class="dash-name" id="dashName">Your Long Game</div>
+    <div class="dash-date" id="dashDate"></div>
+  </div>
+
+  <div class="score-hero">
+    <div class="score-main">
+      <div class="score-ring-wrap">
+        <svg width="110" height="110" viewBox="0 0 110 110">
+          <circle cx="55" cy="55" r="46" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="7"/>
+          <circle cx="55" cy="55" r="46" fill="none" stroke="url(#scoreG)" stroke-width="7"
+            stroke-linecap="round" stroke-dasharray="289" id="scoreRing" stroke-dashoffset="289"
+            transform="rotate(-90 55 55)"/>
+          <defs>
+            <linearGradient id="scoreG" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#2DBE8A"/>
+              <stop offset="100%" stop-color="#4EA8DE"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="score-inner">
+          <div class="score-num" id="scoreNum">--</div>
+          <div class="score-denom">/ 100</div>
+        </div>
+      </div>
+      <div class="score-text">
+        <h3 id="scoreRating">--</h3>
+        <p id="scoreSummary">Loading your report…</p>
+      </div>
+    </div>
+    <div class="narrative-card">
+      <div class="narrative-card-label">Your story</div>
+      <p id="narrativeText">Loading…</p>
+    </div>
+  </div>
+
+  <div class="pillars-grid" id="pillarsGrid"></div>
+
+  <div class="priorities-section">
+    <div class="section-label">Your top three priorities</div>
+    <div class="priority-cards" id="priorityCards"></div>
+  </div>
+
+  <div class="dash-actions">
+    <button class="btn btn-primary" onclick="switchTab('coach')">
+      Talk to your AI Coach →
+    </button>
+    <button class="btn btn-ghost" onclick="switchTab('checkin')">Weekly Check-in</button>
+  </div>
+</div>
+</div>
+
+<!-- COACH -->
+<div class="screen" id="screen-coach">
+<div class="coach-wrap">
+  <div class="coach-sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Your scores</div>
+      <div class="sidebar-score" id="sidebarScores"></div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Focus areas</div>
+      <div id="sidebarFocus"></div>
+    </div>
+  </div>
+  <div class="coach-main">
+    <div class="coach-header">
+      <div class="coach-avatar">🧠</div>
+      <div class="coach-meta">
+        <h3>Your Long Game Coach</h3>
+        <p>AI-powered · Evidence-based · Always available</p>
+      </div>
+      <div class="coach-mode-badge" id="coachModeBadge">Coach mode</div>
+    </div>
+    <div class="suggested-qs" id="suggestedQs"></div>
+    <div class="messages" id="messages"></div>
+    <div class="coach-input-wrap">
+      <textarea class="coach-input" id="chatInput" placeholder="Ask your coach anything…" rows="1"
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg()}"></textarea>
+      <button class="btn btn-primary btn-sm" onclick="sendMsg()">Send</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- CHECKIN -->
+<div class="screen" id="screen-checkin">
+<div class="checkin">
+  <div class="checkin-intro">
+    <div class="checkin-badge"><div class="pulse-dot"></div>Weekly Check-in</div>
+    <div class="section-h">How's your week been?</div>
+    <div class="section-sub">Five quick readings across your five dimensions. This data trains your AI coach and tracks your trajectory over time.</div>
+  </div>
+
+  <div id="sliders"></div>
+
+  <div class="open-q">
+    <label>What's one thing that's been on your mind this week — in any area of your life?</label>
+    <textarea class="open-textarea" id="checkinNote" placeholder="Whatever's present for you right now…"></textarea>
+  </div>
+
+  <div style="display:flex;gap:10px">
+    <button class="btn btn-primary" onclick="submitCheckin()">Submit Check-in →</button>
+    <button class="btn btn-ghost" onclick="switchTab('dashboard')">Skip for now</button>
+  </div>
+</div>
+</div>
+
+</div><!-- /app -->
+
+<script>
+// ─── State ───────────────────────────────────────────────────
+let state = {
+  name: '',
+  coachStyle: 'coach',
+  context: '',
+  answers: [],
+  scores: [],
+  overall: 0,
+  report: null,
+  messages: [],
+  checkins: []
+};
+
+const PILLARS = [
+  { name:'Physical Longevity', short:'Physical', color:'#2DBE8A', emoji:'💚', desc:'Body, movement, sleep, metabolic health' },
+  { name:'Mental Performance', short:'Mental', color:'#8B7FF0', emoji:'🧠', desc:'Cognition, stress, recovery, resilience' },
+  { name:'Financial Sovereignty', short:'Financial', color:'#C9A84C', emoji:'🏛️', desc:'Security, strategy, freedom from financial anxiety' },
+  { name:'Inner Life', short:'Inner', color:'#E07B6A', emoji:'🔥', desc:'Self-knowledge, values, emotional depth, solitude' },
+  { name:'Relational Life', short:'Relational', color:'#4EA8DE', emoji:'🌊', desc:'Partnership, family, friendship, community, presence' }
+];
+
+const QUESTIONS = [
+  // Physical (0)
+  { p:0, q:'How many hours of quality, restorative sleep are you getting most nights?',
+    opts:[{l:'Under 5 hours — chronically depleted',s:1},{l:'5–6 hours — below what I need',s:2},{l:'6–7 hours — adequate but not optimal',s:3},{l:'7–8 hours — genuinely restorative',s:5},{l:'More than 8 hours — varies by season',s:4}] },
+  { p:0, q:'How intentional and consistent is your approach to physical movement?',
+    opts:[{l:'Sedentary — mostly desk and commute',s:1},{l:'Occasional — sporadic and unplanned',s:2},{l:'Moderate — 1–2 sessions most weeks',s:3},{l:'Active — 3–4 structured sessions weekly',s:4},{l:'Very active — daily intentional movement',s:5}] },
+  { p:0, q:'When did you last have a comprehensive health assessment with full bloodwork?',
+    opts:[{l:'Never, or I genuinely can\'t recall',s:1},{l:'More than 3 years ago',s:2},{l:'1–3 years ago',s:3},{l:'Within the last year',s:4},{l:'Within the last 6 months — I track my markers',s:5}] },
+  // Mental (1)
+  { p:1, q:'How often do you experience sustained mental clarity and genuine focus during your working hours?',
+    opts:[{l:'Rarely — scattered, reactive, hard to concentrate',s:1},{l:'Inconsistently — good days and bad',s:2},{l:'About half the time — unreliable',s:3},{l:'Most of the time — a few good days weekly',s:4},{l:'Almost always — consistently clear and present',s:5}] },
+  { p:1, q:'When significant stress arrives, how well do you metabolize it without it impairing your health or performance?',
+    opts:[{l:'Very poorly — stress regularly derails me',s:1},{l:'Poorly — I cope but the cost is visible',s:2},{l:'Adequately — I get through it',s:3},{l:'Well — I have real practices that help',s:4},{l:'Very well — I use stress as information',s:5}] },
+  { p:1, q:'How completely can you mentally disengage from work and genuinely recover outside of it?',
+    opts:[{l:'Almost impossible — always on',s:1},{l:'Very difficult — rarely manage it',s:2},{l:'Partial — some recovery, not full',s:3},{l:'Fairly well — I protect personal time',s:4},{l:'Fully — clear boundaries, real recovery',s:5}] },
+  // Financial (2)
+  { p:2, q:'How confident are you that your financial architecture will fund the life you actually want in 10+ years?',
+    opts:[{l:'Not at all — I haven\'t seriously thought about it',s:1},{l:'Slightly — I hope it works out',s:2},{l:'Moderately — some savings, vague plan',s:3},{l:'Quite confident — solid plan in place',s:4},{l:'Very confident — clear strategy, assets aligned',s:5}] },
+  { p:2, q:'How frequently does financial anxiety create a drag on your daily performance or peace of mind?',
+    opts:[{l:'Daily — it\'s a constant weight',s:1},{l:'Several times a week',s:2},{l:'Occasionally — around major decisions',s:3},{l:'Rarely — I feel broadly secure',s:4},{l:'Almost never — my foundation is solid',s:5}] },
+  { p:2, q:'Do you have a documented, actively maintained financial plan aligned with your long-term goals and values?',
+    opts:[{l:'No plan whatsoever',s:1},{l:'A vague mental model only',s:2},{l:'Partial — some areas covered',s:3},{l:'Solid — documented and reviewed occasionally',s:4},{l:'Comprehensive — reviewed and updated regularly',s:5}] },
+  // Inner Life (3)
+  { p:3, q:'How well do you know yourself outside of your professional role and achievements?',
+    opts:[{l:'Poorly — my identity is largely my work',s:1},{l:'Slightly — I\'ve thought about it but not deeply',s:2},{l:'Moderately — some self-awareness',s:3},{l:'Well — I have a clear sense of who I am',s:4},{l:'Very well — ongoing inner inquiry is a practice',s:5}] },
+  { p:3, q:'How comfortable are you sitting with uncertainty, ambiguity, or not having a clear answer?',
+    opts:[{l:'Very uncomfortable — I need resolution quickly',s:1},{l:'Uncomfortable — I avoid ambiguity',s:2},{l:'Neutral — I tolerate it but don\'t welcome it',s:3},{l:'Fairly comfortable — I\'ve learned to sit with it',s:4},{l:'Very comfortable — uncertainty is where I learn',s:5}] },
+  { p:3, q:'How deliberately do you invest time in reflection, solitude, or deeper self-inquiry?',
+    opts:[{l:'Almost never — no time or desire',s:1},{l:'Rarely — only in crisis',s:2},{l:'Occasionally — when something forces it',s:3},{l:'Regularly — a few times a week',s:4},{l:'Daily — it\'s a non-negotiable practice',s:5}] },
+  // Relational (4)
+  { p:4, q:'How present and genuinely engaged are you in your most important personal relationships right now?',
+    opts:[{l:'Very distracted — there but not really there',s:1},{l:'Partially — I show up but not fully',s:2},{l:'Adequately — reasonably present',s:3},{l:'Well — I\'m mostly genuinely present',s:4},{l:'Very present — this is something I prioritize',s:5}] },
+  { p:4, q:'How would you honestly rate the depth and nourishment of your close friendships?',
+    opts:[{l:'Very thin — mostly acquaintances',s:1},{l:'Shallow — surface-level connections',s:2},{l:'Moderate — a few people I trust',s:3},{l:'Good — meaningful connections I invest in',s:4},{l:'Deep — genuinely known and knowing others',s:5}] },
+  { p:4, q:'How well are you showing up as the partner, parent, or friend you genuinely want to be — not the one your schedule allows?',
+    opts:[{l:'Very poorly — big gap between intention and reality',s:1},{l:'Poorly — I fall short regularly',s:2},{l:'Adequately — mostly okay',s:3},{l:'Well — I live up to my intentions most of the time',s:4},{l:'Very well — my relationships reflect my values',s:5}] }
+];
+
+let currentQ = 0;
+state.answers = new Array(QUESTIONS.length).fill(null);
+
+// ─── Navigation ──────────────────────────────────────────────
+function goTo(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById('screen-' + id);
+  el.classList.remove('active');
+  void el.offsetWidth;
+  el.classList.add('active');
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.nav-tab').forEach((t, i) => {
+    t.classList.toggle('active', ['dashboard','coach','checkin'][i] === tab);
+  });
+  if (tab === 'coach') initCoach();
+  if (tab === 'checkin') initCheckin();
+  goTo(tab);
+}
+
+// ─── Onboard ─────────────────────────────────────────────────
+function selectStyle(s) {
+  state.coachStyle = s;
+  document.getElementById('style-coach').classList.toggle('selected', s === 'coach');
+  document.getElementById('style-advisor').classList.toggle('selected', s === 'advisor');
+}
+
+function startAssessment() {
+  const name = document.getElementById('userName').value.trim();
+  if (!name) { document.getElementById('userName').focus(); return; }
+  state.name = name;
+  state.context = document.getElementById('userContext').value.trim();
+  currentQ = 0;
+  document.getElementById('progBar').classList.add('show');
+  goTo('assessment');
+  renderQ();
+}
+
+// ─── Assessment ──────────────────────────────────────────────
+function renderQ() {
+  const q = QUESTIONS[currentQ];
+  const p = PILLARS[q.p];
+  const pct = (currentQ / QUESTIONS.length) * 100;
+  document.getElementById('progFill').style.width = pct + '%';
+
+  document.getElementById('pillarHeader').innerHTML = `
+    <div class="pillar-icon" style="background:${p.color}22">${p.emoji}</div>
+    <div class="pillar-meta">
+      <div class="pillar-meta-name" style="color:${p.color}">${p.name}</div>
+      <div class="pillar-meta-desc">${p.desc}</div>
+    </div>`;
+  document.getElementById('qNum').textContent = `Question ${currentQ + 1} of ${QUESTIONS.length}`;
+  document.getElementById('qText').textContent = q.q;
+  document.getElementById('qErr').style.display = 'none';
+
+  const c = document.getElementById('opts');
+  c.innerHTML = '';
+  q.opts.forEach((o, i) => {
+    const d = document.createElement('div');
+    d.className = 'opt' + (state.answers[currentQ] === i ? ' sel' : '');
+    d.innerHTML = `<div class="opt-circle"></div><span>${o.l}</span>`;
+    d.onclick = () => {
+      state.answers[currentQ] = i;
+      document.querySelectorAll('.opt').forEach((el, j) => el.classList.toggle('sel', j === i));
+      document.getElementById('qErr').style.display = 'none';
+    };
+    c.appendChild(d);
+  });
+
+  document.getElementById('btnBack').style.display = currentQ === 0 ? 'none' : 'inline-flex';
+  document.getElementById('btnNextTxt').textContent = currentQ === QUESTIONS.length - 1 ? 'See My Results' : 'Next';
+  document.getElementById('qProg').textContent = `${currentQ + 1} / ${QUESTIONS.length}`;
+}
+
+function nextQ() {
+  if (state.answers[currentQ] === null) {
+    document.getElementById('qErr').style.display = 'block';
+    return;
+  }
+  if (currentQ < QUESTIONS.length - 1) { currentQ++; renderQ(); }
+  else submitAssessment();
+}
+
+function prevQ() { if (currentQ > 0) { currentQ--; renderQ(); } }
+
+// ─── Scoring ─────────────────────────────────────────────────
+function calcScores() {
+  const sums = [0,0,0,0,0], counts = [0,0,0,0,0];
+  QUESTIONS.forEach((q, i) => {
+    if (state.answers[i] !== null) {
+      sums[q.p] += QUESTIONS[i].opts[state.answers[i]].s;
+      counts[q.p]++;
+    }
+  });
+  state.scores = sums.map((s, i) => counts[i] ? Math.round((s / (counts[i] * 5)) * 100) : 0);
+  state.overall = Math.round(state.scores.reduce((a,b) => a+b,0) / 5);
+}
+
+// ─── Submission ──────────────────────────────────────────────
+async function submitAssessment() {
+  document.getElementById('progFill').style.width = '100%';
+  goTo('loading');
+  calcScores();
+
+  // animate loading steps
+  const steps = ['ls1','ls2','ls3','ls4'];
+  steps.forEach((id, i) => setTimeout(() => document.getElementById(id).classList.add('done'), 600 + i * 700));
+
+  const prompt = buildReportPrompt();
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1500,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    const data = await res.json();
+    const text = data.content.map(c => c.text || '').join('');
+    const clean = text.replace(/```json|```/g,'').trim();
+    state.report = JSON.parse(clean);
+  } catch(e) {
+    state.report = fallbackReport();
+  }
+
+  setTimeout(() => {
+    renderDashboard();
+    document.getElementById('navScore').style.display = 'block';
+    document.getElementById('navScoreVal').textContent = state.overall;
+    document.getElementById('navTabs').style.display = 'flex';
+    switchTab('dashboard');
+  }, 3200);
+}
+
+function buildReportPrompt() {
+  let ans = '';
+  QUESTIONS.forEach((q, i) => {
+    if (state.answers[i] !== null) {
+      ans += `[${PILLARS[q.p].name}] ${q.q}\nAnswer: "${q.opts[state.answers[i]].l}" (score: ${q.opts[state.answers[i]].s}/5)\n\n`;
+    }
+  });
+  const styleNote = state.coachStyle === 'coach'
+    ? 'This person prefers a direct, precise, evidence-based coaching style. Be honest and challenging, not soft.'
+    : 'This person prefers a Socratic, reflective advisor style. Ask good questions, be exploratory.';
+  const ctxNote = state.context ? `They noted: "${state.context}"` : '';
+
+  return `You are an expert life performance coach specializing in the transition from first-half career success to second-half wholeness — integrating physical longevity, mental performance, financial sovereignty, inner life, and relational depth. ${styleNote} ${ctxNote}
+
+ASSESSMENT ANSWERS:
+${ans}
+
+PILLAR SCORES (0-100):
+Physical Longevity: ${state.scores[0]}
+Mental Performance: ${state.scores[1]}
+Financial Sovereignty: ${state.scores[2]}
+Inner Life: ${state.scores[3]}
+Relational Life: ${state.scores[4]}
+Overall: ${state.overall}
+
+Generate a JSON report (pure JSON only, no markdown):
+{
+  "rating": "2-4 word label e.g. 'At a Crossroads', 'Building Momentum', 'Strong Foundation', 'Ready to Leap'",
+  "summary": "2-3 sentence honest, precise overall summary. Name what's working and what isn't. Be direct.",
+  "narrative": "3-4 sentences written directly to them as 'you'. This is the most important section — it should feel like it came from someone who has genuinely read their whole life situation, not just their scores. Reference the transition they're navigating. Acknowledge what it costs to be high-performing for decades and what this inflection point is asking of them.",
+  "pillarInsights": {
+    "physical": "1-2 sentences specific to their physical results",
+    "mental": "1-2 sentences specific to their mental performance",
+    "financial": "1-2 sentences specific to their financial situation",
+    "inner": "1-2 sentences specific to their inner life score — this is often the most important and underexplored dimension for high performers",
+    "relational": "1-2 sentences specific to their relational life"
+  },
+  "priorities": [
+    {"title": "Priority title", "description": "2-3 sentences. Specific and actionable. Reference their actual answers."},
+    {"title": "Priority title", "description": "2-3 sentences. Specific and actionable."},
+    {"title": "Priority title", "description": "2-3 sentences. Specific and actionable."}
+  ],
+  "openingMessage": "The first message from their AI coach — 2-3 sentences. Warm but not soft. Acknowledge what you see in their results and invite them into the conversation. Ask one specific, good question based on what stands out most in their assessment."
+}`;
+}
+
+function fallbackReport() {
+  const s = state.scores;
+  const lowest = PILLARS[s.indexOf(Math.min(...s))].name;
+  return {
+    rating: state.overall >= 72 ? 'Strong Foundation' : state.overall >= 55 ? 'Building Momentum' : 'At a Crossroads',
+    summary: `Your results reveal a person who has built real strength in some dimensions while leaving others largely unattended. This is the pattern of someone who has been excellent at the external game — and is now being asked to expand the definition of what excellence means.`,
+    narrative: `You've spent years optimizing for achievement, and by most measures you've succeeded. But something in you recognizes that the same drive and intensity that built your career isn't the right tool for this next chapter. The transition you're entering isn't about doing more or doing better — it's about doing differently. Your scores reflect someone who is ready for that conversation.`,
+    pillarInsights: {
+      physical: `Your physical score of ${s[0]} suggests ${s[0] >= 70 ? 'a solid foundation — protect it as demands on your time increase' : 'meaningful gaps worth addressing now, before the cost compounds'}.`,
+      mental: `With a mental performance score of ${s[1]}, ${s[1] >= 70 ? 'your cognitive resilience is working for you' : 'stress and recovery deserve more deliberate attention'}.`,
+      financial: `Your financial sovereignty score of ${s[2]} indicates ${s[2] >= 70 ? 'a strong foundation that creates real freedom' : 'financial clarity as a priority — anxiety here creates drag everywhere else'}.`,
+      inner: `An inner life score of ${s[3]} is often where high performers are most surprised. ${s[3] < 60 ? 'This dimension is frequently the most underinvested — and the most consequential for the second half.' : 'This is genuinely rare territory for someone at your career stage.'}`,
+      relational: `Your relational score of ${s[4]} suggests ${s[4] >= 70 ? 'real investment in the relationships that matter most' : 'a gap between who you want to be in your relationships and who your schedule currently allows'}.`
+    },
+    priorities: [
+      { title: `Invest in your ${lowest}`, description: `Your lowest-scoring dimension deserves focused attention first. Even small, consistent improvements here create compounding gains across every other area of your life. Identify one specific change you can make this week.` },
+      { title: 'Design your transition deliberately', description: `The passage from first-half to second-half life doesn\'t happen on its own — it requires the same intentionality you brought to building your career. Start by writing down what you want the next decade to actually feel like, not just look like.` },
+      { title: 'Build your 90-day baseline', description: `Use the next 90 days to establish one new practice in each of your five dimensions. Not a dramatic overhaul — one thing per pillar. Track it. Let the data show you what's working.` }
+    ],
+    openingMessage: `I've read through your assessment carefully. What strikes me most is the gap between your ${PILLARS[s.indexOf(Math.max(...s))].name.toLowerCase()} — where you're genuinely strong — and your ${lowest.toLowerCase()}, which tells a different story. That gap usually has a reason. What do you think has kept you from investing more there?`
+  };
+}
+
+// ─── Dashboard ───────────────────────────────────────────────
+function renderDashboard() {
+  const r = state.report;
+  const now = new Date();
+  const hour = now.getHours();
+  const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+
+  document.getElementById('dashGreeting').textContent = greeting + ', ' + state.name;
+  document.getElementById('dashName').textContent = r.rating;
+  document.getElementById('dashDate').textContent = now.toLocaleDateString('en-CA', {year:'numeric',month:'long',day:'numeric'});
+
+  document.getElementById('scoreNum').textContent = state.overall;
+  document.getElementById('scoreRating').textContent = r.rating;
+  document.getElementById('scoreSummary').textContent = r.summary;
+  document.getElementById('narrativeText').textContent = r.narrative;
+
+  const circ = 289;
+  setTimeout(() => {
+    document.getElementById('scoreRing').style.strokeDashoffset = circ - (state.overall / 100) * circ;
+  }, 300);
+
+  const pillarKeys = ['physical','mental','financial','inner','relational'];
+  const pg = document.getElementById('pillarsGrid');
+  pg.innerHTML = '';
+  PILLARS.forEach((p, i) => {
+    const sc = state.scores[i];
+    const insight = r.pillarInsights[pillarKeys[i]] || '';
+    const card = document.createElement('div');
+    card.className = 'pillar-card';
+    card.innerHTML = `
+      <div class="pillar-card-name" style="color:${p.color}">${p.short}</div>
+      <div class="pillar-card-score" style="color:${p.color}">${sc}</div>
+      <div class="pillar-bar-bg"><div class="pillar-bar" style="background:${p.color};width:0%" id="pb${i}"></div></div>
+      <div class="pillar-insight">${insight}</div>`;
+    pg.appendChild(card);
+    setTimeout(() => document.getElementById('pb'+i).style.width = sc+'%', 500 + i*80);
+  });
+
+  const pc = document.getElementById('priorityCards');
+  pc.innerHTML = '';
+  (r.priorities||[]).forEach((p, i) => {
+    const d = document.createElement('div');
+    d.className = 'priority-card';
+    d.innerHTML = `<div class="priority-n">${i+1}</div><div><h4>${p.title}</h4><p>${p.description}</p></div>`;
+    pc.appendChild(d);
+  });
+}
+
+// ─── Coach ───────────────────────────────────────────────────
+function initCoach() {
+  if (state.messages.length > 0) return;
+  document.getElementById('coachModeBadge').textContent =
+    state.coachStyle === 'coach' ? 'Coach mode' : 'Advisor mode';
+
+  // Sidebar scores
+  const ss = document.getElementById('sidebarScores');
+  ss.innerHTML = '';
+  PILLARS.forEach((p, i) => {
+    ss.innerHTML += `
+      <div class="sidebar-score-row">
+        <span class="sidebar-score-name">${p.short}</span>
+        <span class="sidebar-score-val" style="color:${p.color}">${state.scores[i]}</span>
+      </div>
+      <div class="sidebar-bar-bg" style="margin-bottom:10px">
+        <div class="sidebar-bar" style="background:${p.color};width:${state.scores[i]}%"></div>
+      </div>`;
+  });
+
+  // Focus areas (lowest 2 pillars)
+  const sorted = [...state.scores.map((s,i) => ({s,i}))].sort((a,b) => a.s - b.s);
+  const sf = document.getElementById('sidebarFocus');
+  sf.innerHTML = '';
+  sorted.slice(0,2).forEach(({i}) => {
+    const p = PILLARS[i];
+    sf.innerHTML += `<div class="sidebar-pillar-mini"><div class="sidebar-dot" style="background:${p.color}"></div>${p.name}</div>`;
+  });
+
+  // Suggested questions
+  const sugs = [
+    'Where do I start?',
+    'What does my lowest score really mean?',
+    'How do I design my second half?',
+    'Talk to me about the transition',
+    'What does financial sovereignty actually look like?'
+  ];
+  const sq = document.getElementById('suggestedQs');
+  sq.innerHTML = sugs.map(s => `<div class="sug-q" onclick="useSug('${s}')">${s}</div>`).join('');
+
+  // Opening message
+  const opening = state.report?.openingMessage || `Welcome, ${state.name}. I've reviewed your assessment results carefully. What would you like to explore first?`;
+  addMsg('coach', opening);
+}
+
+function useSug(text) {
+  document.getElementById('chatInput').value = text;
+  sendMsg();
+  document.getElementById('suggestedQs').innerHTML = '';
+}
+
+function addMsg(role, text) {
+  state.messages.push({role, text});
+  const msgs = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  const initial = role === 'user' ? (state.name.charAt(0).toUpperCase()) : '🧠';
+  div.innerHTML = `
+    <div class="msg-avatar">${initial}</div>
+    <div class="msg-bubble">${text.replace(/\n/g,'<br>')}</div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function showTyping() {
+  const msgs = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'msg coach';
+  div.id = 'typing';
+  div.innerHTML = `<div class="msg-avatar">🧠</div><div class="msg-bubble"><div class="msg-typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function removeTyping() {
+  const t = document.getElementById('typing');
+  if (t) t.remove();
+}
+
+async function sendMsg() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  input.style.height = 'auto';
+
+  addMsg('user', text);
+  showTyping();
+  document.getElementById('suggestedQs').innerHTML = '';
+
+  const styleNote = state.coachStyle === 'coach'
+    ? 'You are a direct, evidence-based coach. Be precise and honest. Challenge where appropriate. No fluff.'
+    : 'You are a Socratic advisor. Ask probing questions. Be exploratory and reflective. Lead with curiosity.';
+
+  const systemPrompt = `You are The Long Game AI coach. ${styleNote}
+
+USER CONTEXT:
+Name: ${state.name}
+Initial context: ${state.context || 'Not provided'}
+Coach style preference: ${state.coachStyle}
+
+ASSESSMENT SCORES:
+${PILLARS.map((p,i) => `${p.name}: ${state.scores[i]}/100`).join('\n')}
+Overall: ${state.overall}/100
+
+Report summary: ${state.report?.summary || ''}
+Key priorities: ${(state.report?.priorities||[]).map(p=>p.title).join(', ')}
+
+Keep responses conversational and focused — 2-4 paragraphs maximum. Draw on the latest evidence in longevity, behavioral psychology, motivation science, and life design. Don't be generic. Reference their specific scores and situation where relevant.`;
+
+  const history = state.messages.slice(-10).map(m => ({
+    role: m.role === 'coach' ? 'assistant' : 'user',
+    content: m.text
+  }));
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:600,
+        system: systemPrompt,
+        messages: history
+      })
+    });
+    const data = await res.json();
+    const reply = data.content.map(c => c.text||'').join('');
+    removeTyping();
+    addMsg('coach', reply);
+  } catch(e) {
+    removeTyping();
+    addMsg('coach', "I'm having a moment of difficulty connecting. Try again in a moment — I'm still here.");
+  }
+}
+
+// ─── Check-in ────────────────────────────────────────────────
+function initCheckin() {
+  const s = document.getElementById('sliders');
+  s.innerHTML = '';
+  PILLARS.forEach((p, i) => {
+    s.innerHTML += `
+      <div class="slider-wrap">
+        <div class="slider-label">
+          <span class="slider-name" style="color:${p.color}">${p.name}</span>
+          <span class="slider-val" id="sv${i}">5</span>
+        </div>
+        <input type="range" class="slider" min="1" max="10" value="5" id="sl${i}"
+          oninput="document.getElementById('sv${i}').textContent=this.value"
+          style="accent-color:${p.color}">
+        <div class="slider-ends"><span class="slider-end">Struggling</span><span class="slider-end">Thriving</span></div>
+      </div>`;
+  });
+}
+
+async function submitCheckin() {
+  const vals = PILLARS.map((p,i) => parseInt(document.getElementById('sl'+i).value));
+  const note = document.getElementById('checkinNote').value.trim();
+  const checkin = { date: new Date().toISOString(), scores: vals, note };
+  state.checkins.push(checkin);
+
+  // Send to AI coach as context update
+  const summary = `Weekly check-in submitted. Scores: ${PILLARS.map((p,i) => `${p.short}: ${vals[i]}/10`).join(', ')}. ${note ? 'Note: ' + note : ''}`;
+  state.messages.push({role:'user', text: summary});
+
+  switchTab('coach');
+  addMsg('user', `I just completed my weekly check-in. ${PILLARS.map((p,i) => `${p.short}: ${vals[i]}/10`).join(' · ')}${note ? '\n\n"' + note + '"' : ''}`);
+
+  showTyping();
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:400,
+        system:`You are The Long Game AI coach. ${state.coachStyle === 'coach' ? 'Be direct and evidence-based.' : 'Be Socratic and reflective.'} The user has just submitted a weekly check-in. Respond in 2-3 sentences — acknowledge what stands out, notice any patterns compared to their baseline assessment (${PILLARS.map((p,i)=>`${p.short} baseline: ${state.scores[i]}/100`).join(', ')}), and ask one good question.`,
+        messages:[{role:'user',content:`Weekly check-in: ${PILLARS.map((p,i)=>`${p.short}: ${vals[i]}/10`).join(', ')}. ${note}`}]
+      })
+    });
+    const data = await res.json();
+    removeTyping();
+    addMsg('coach', data.content.map(c=>c.text||'').join(''));
+  } catch(e) {
+    removeTyping();
+    addMsg('coach', `Thank you for checking in. I can see movement in your scores — let's talk about what's driving that.`);
+  }
+}
+
+// Auto-resize textarea
+document.addEventListener('DOMContentLoaded', () => {
+  const ta = document.getElementById('chatInput');
+  if (ta) ta.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+  });
+});
+</script>
+</body>
+</html>
